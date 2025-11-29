@@ -5,6 +5,7 @@ import serviceReducer from '../features/services/serviceSlice'
 import testimonialReducer from '../features/testimonials/testimonialSlice'
 import uiReducer from '../features/ui/uiSlice'
 import newsletterReducer from '../features/newsletter/newsletterSlice'
+import callbackReducer from '../features/callbacks/callbackSlice'
 import { injectStore } from '../api/axios'
 
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
     testimonials: testimonialReducer,
     ui: uiReducer,
     newsletter: newsletterReducer,
+    callbacks: callbackReducer,
   },
 })
 

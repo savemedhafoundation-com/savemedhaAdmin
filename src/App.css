@@ -396,6 +396,31 @@ h2 {
   align-items: center;
 }
 
+.callback-actions {
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.callback-actions .action-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.callback-actions select,
+.callback-actions button {
+  min-width: 140px;
+}
+
+.action-label {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
 .primary-button,
 .ghost-button {
   display: inline-flex;

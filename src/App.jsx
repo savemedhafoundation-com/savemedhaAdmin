@@ -13,6 +13,8 @@ import TestimonialList from './pages/testimonials/TestimonialList'
 import TestimonialForm from './pages/testimonials/TestimonialForm'
 import Login from './pages/Login'
 import NewsletterList from './pages/newsletter/NewsletterList'
+import CallbackList from './pages/callbacks/CallbackList'
+import CallbackForm from './pages/callbacks/CallbackForm'
 
 const ThemeWatcher = () => {
   const theme = useSelector((state) => state.ui.theme)
@@ -50,6 +52,8 @@ function App() {
           <Route path="/testimonials" element={<TestimonialList />} />
           <Route path="/testimonials/new" element={<TestimonialForm />} />
           <Route path="/testimonials/:id" element={<TestimonialForm />} />
+          <Route path="/requestcallbacks" element={<CallbackList />} />
+          <Route path="/requestcallbacks/new" element={<CallbackForm />} />
           <Route path="/newsletter" element={<NewsletterList />} />
         </Route>
 

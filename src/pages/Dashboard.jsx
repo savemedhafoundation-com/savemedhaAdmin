@@ -16,7 +16,7 @@ const Dashboard = () => {
 
   const cards = [
     { label: 'Active Blogs', value: blogCount, icon: <LuListChecks /> },
-    { label: 'Services Live', value: serviceCount, icon: <LuSparkles /> },
+    { label: 'Total Services Available', value: serviceCount, icon: <LuSparkles /> },
     { label: 'Engagement', value: '68%', icon: <LuChartBar /> },
   ]
 
