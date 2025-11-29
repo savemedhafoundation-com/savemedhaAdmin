@@ -1,9 +1,18 @@
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { LuChartBar, LuListChecks, LuSparkles } from 'react-icons/lu'
+import { fetchBlogs } from '../features/blogs/blogSlice'
+import { fetchServices } from '../features/services/serviceSlice'
 
 const Dashboard = () => {
+  const dispatch = useDispatch()
   const blogCount = useSelector((state) => state.blogs.items.length)
   const serviceCount = useSelector((state) => state.services.items.length)
+
+  useEffect(() => {
+    dispatch(fetchBlogs())
+    dispatch(fetchServices())
+  }, [dispatch])
 
   const cards = [
     { label: 'Active Blogs', value: blogCount, icon: <LuListChecks /> },

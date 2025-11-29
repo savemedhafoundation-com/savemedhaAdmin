@@ -1,56 +1,40 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import api from '../../api/axios'
 
 const initialState = {
-  items: [
-    {
-      id: 'welcome',
-      title: 'Welcome to Savemedha',
-      summary: 'Kick-off post that introduces the platform mission and goals.',
-      status: 'Published',
-      updatedAt: new Date().toISOString(),
-    },
-  ],
+  items: [],
   status: 'idle',
   error: null,
 }
 
+export const fetchBlogs = createAsyncThunk('blogs/fetchAll', async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get('/blogs')
+    return response.data
+  } catch (error) {
+    return rejectWithValue(error?.response?.data?.message || 'Failed to load blogs')
+  }
+})
+
 const blogSlice = createSlice({
   name: 'blogs',
   initialState,
-  reducers: {
-    setBlogs: (state, action) => {
-      state.items = action.payload
-    },
-    addBlog: {
-      reducer: (state, action) => {
-        state.items.unshift(action.payload)
-      },
-      prepare: (data) => ({
-        payload: {
-          id: nanoid(),
-          updatedAt: new Date().toISOString(),
-          status: data.status || 'Draft',
-          ...data,
-        },
-      }),
-    },
-    updateBlog: (state, action) => {
-      const { id, data } = action.payload
-      const index = state.items.findIndex((item) => item.id === id)
-      if (index !== -1) {
-        state.items[index] = {
-          ...state.items[index],
-          ...data,
-          updatedAt: new Date().toISOString(),
-        }
-      }
-    },
-    deleteBlog: (state, action) => {
-      state.items = state.items.filter((item) => item.id !== action.payload)
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchBlogs.pending, (state) => {
+        state.status = 'loading'
+        state.error = null
+      })
+      .addCase(fetchBlogs.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.items = action.payload
+      })
+      .addCase(fetchBlogs.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.payload || 'Failed to load blogs'
+      })
   },
 })
-
-export const { setBlogs, addBlog, updateBlog, deleteBlog } = blogSlice.actions
 
 export default blogSlice.reducer

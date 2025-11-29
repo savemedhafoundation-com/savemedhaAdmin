@@ -3,8 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { LuLock, LuMail } from 'react-icons/lu'
-import api from '../api/axios'
-import { loginSuccess, setAuthError, setAuthStatus } from '../features/auth/authSlice'
+import { login } from '../features/auth/authSlice'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -22,23 +21,10 @@ const Login = () => {
   }, [token, navigate])
 
   const onSubmit = async (values) => {
-    dispatch(setAuthStatus('loading'))
-    dispatch(setAuthError(null))
-    try {
-      // Swap this stub with a real API call when backend is ready.
-      await api.post('/users/login', values)
-      dispatch(
-        loginSuccess({
-          token: 'demo-jwt-token',
-          user: { name: 'Admin User', email: values.email },
-        }),
-      )
-      dispatch(setAuthStatus('succeeded'))
+    const result = await dispatch(login(values))
+    if (login.fulfilled.match(result)) {
       const redirectTo = location.state?.from?.pathname || '/'
       navigate(redirectTo, { replace: true })
-    } catch (err) {
-      dispatch(setAuthStatus('failed'))
-      dispatch(setAuthError(err?.response?.data?.message || 'Login failed'))
     }
   }
 
@@ -60,7 +46,7 @@ const Login = () => {
             <span>Password</span>
             <div className="form-input">
               <LuLock size={16} />
-              <input type="password" placeholder="••••••••" {...register('password', { required: true })} />
+              <input type="password" placeholder="********" {...register('password', { required: true })} />
             </div>
           </label>
 

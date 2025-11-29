@@ -1,37 +1,50 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { addBlog, updateBlog } from '../../features/blogs/blogSlice'
+import { fetchBlogs } from '../../features/blogs/blogSlice'
+import api from '../../api/axios'
 
 const BlogForm = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const blog = useSelector((state) => state.blogs.items.find((item) => item.id === id))
+  const { items, status } = useSelector((state) => state.blogs)
+  const blog = items.find((item) => item._id === id)
+  const [submitError, setSubmitError] = useState('')
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       title: '',
-      summary: '',
-      status: 'Draft',
-      content: '',
+      description: '',
+      category: '',
+      writtenBy: '',
+      metadata: '',
     },
   })
 
   useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchBlogs())
+    }
     if (blog) {
       reset(blog)
     }
-  }, [blog, reset])
+  }, [blog, reset, status, dispatch])
 
-  const onSubmit = (values) => {
-    if (id && blog) {
-      dispatch(updateBlog({ id, data: values }))
-    } else {
-      dispatch(addBlog(values))
+  const onSubmit = async (values) => {
+    setSubmitError('')
+    if (!id) {
+      setSubmitError('Creating blogs requires image upload; please use backend endpoint.')
+      return
     }
-    navigate('/blogs')
+    try {
+      await api.put(`/blogs/${id}`, values)
+      dispatch(fetchBlogs())
+      navigate('/blogs')
+    } catch (error) {
+      setSubmitError(error?.response?.data?.message || 'Failed to update blog')
+    }
   }
 
   return (
@@ -51,22 +64,26 @@ const BlogForm = () => {
         </label>
 
         <label className="form-field">
-          <span>Summary</span>
-          <textarea rows="2" placeholder="Short preview copy" {...register('summary', { required: true })} />
+          <span>Description</span>
+          <textarea rows="4" placeholder="Short preview copy" {...register('description', { required: true })} />
         </label>
 
         <label className="form-field">
-          <span>Status</span>
-          <select {...register('status')}>
-            <option value="Draft">Draft</option>
-            <option value="Published">Published</option>
-          </select>
+          <span>Category</span>
+          <input type="text" placeholder="cancer | kidney | heart | nerve | spinal | other" {...register('category')} />
         </label>
 
         <label className="form-field">
-          <span>Content</span>
-          <textarea rows="6" placeholder="Main content" {...register('content')} />
+          <span>Written By</span>
+          <input type="text" placeholder="Author name" {...register('writtenBy')} />
         </label>
+
+        <label className="form-field">
+          <span>Metadata</span>
+          <input type="text" placeholder="comma separated tags" {...register('metadata')} />
+        </label>
+
+        {submitError ? <p className="form-error">{submitError}</p> : null}
 
         <div className="form-actions">
           <button className="ghost-button" type="button" onClick={() => navigate('/blogs')}>

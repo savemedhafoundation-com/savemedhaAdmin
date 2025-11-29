@@ -1,37 +1,47 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { addService, updateService } from '../../features/services/serviceSlice'
+import { fetchServices } from '../../features/services/serviceSlice'
+import api from '../../api/axios'
 
 const ServiceForm = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const service = useSelector((state) => state.services.items.find((item) => item.id === id))
+  const { items, status } = useSelector((state) => state.services)
+  const service = items.find((item) => item._id === id)
+  const [submitError, setSubmitError] = useState('')
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
-      name: '',
-      price: 0,
-      status: 'Draft',
+      title: '',
       description: '',
     },
   })
 
   useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchServices())
+    }
     if (service) {
       reset(service)
     }
-  }, [service, reset])
+  }, [service, reset, status, dispatch])
 
-  const onSubmit = (values) => {
-    if (id && service) {
-      dispatch(updateService({ id, data: values }))
-    } else {
-      dispatch(addService({ ...values, price: Number(values.price) }))
+  const onSubmit = async (values) => {
+    setSubmitError('')
+    if (!id) {
+      setSubmitError('Creating services requires an image upload; please use backend endpoint.')
+      return
     }
-    navigate('/services')
+    try {
+      await api.put(`/services/${id}`, values)
+      dispatch(fetchServices())
+      navigate('/services')
+    } catch (error) {
+      setSubmitError(error?.response?.data?.message || 'Failed to update service')
+    }
   }
 
   return (
@@ -46,21 +56,8 @@ const ServiceForm = () => {
 
       <form className="stacked-form" onSubmit={handleSubmit(onSubmit)}>
         <label className="form-field">
-          <span>Name</span>
-          <input type="text" placeholder="Service name" {...register('name', { required: true })} />
-        </label>
-
-        <label className="form-field">
-          <span>Price</span>
-          <input type="number" step="0.01" min="0" {...register('price', { required: true })} />
-        </label>
-
-        <label className="form-field">
-          <span>Status</span>
-          <select {...register('status')}>
-            <option value="Draft">Draft</option>
-            <option value="Active">Active</option>
-          </select>
+          <span>Title</span>
+          <input type="text" placeholder="Service title" {...register('title', { required: true })} />
         </label>
 
         <label className="form-field">
@@ -68,12 +65,14 @@ const ServiceForm = () => {
           <textarea rows="5" placeholder="What is included?" {...register('description')} />
         </label>
 
+        {submitError ? <p className="form-error">{submitError}</p> : null}
+
         <div className="form-actions">
           <button className="ghost-button" type="button" onClick={() => navigate('/services')}>
             Cancel
           </button>
           <button className="primary-button" type="submit">
-            {id ? 'Save changes' : 'Create service'}
+            {id ? 'Save changes' : 'Create service (requires image via API)'}
           </button>
         </div>
       </form>
