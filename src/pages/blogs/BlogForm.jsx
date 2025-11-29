@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchBlogs } from '../../features/blogs/blogSlice'
 import api from '../../api/axios'
+import { toast } from 'react-toastify'
+
+const VALID_CATEGORIES = ['cancer', 'kidney', 'heart', 'nerve', 'spinal', 'other']
 
 const BlogForm = () => {
   const { id } = useParams()
@@ -12,12 +15,14 @@ const BlogForm = () => {
   const { items, status } = useSelector((state) => state.blogs)
   const blog = items.find((item) => item._id === id)
   const [submitError, setSubmitError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedFile, setSelectedFile] = useState(null)
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       title: '',
       description: '',
-      category: '',
+      category: 'cancer',
       writtenBy: '',
       metadata: '',
     },
@@ -28,22 +33,51 @@ const BlogForm = () => {
       dispatch(fetchBlogs())
     }
     if (blog) {
-      reset(blog)
+      reset({
+        ...blog,
+        metadata: Array.isArray(blog.metadata) ? blog.metadata.join(', ') : blog.metadata || '',
+      })
     }
   }, [blog, reset, status, dispatch])
 
   const onSubmit = async (values) => {
     setSubmitError('')
-    if (!id) {
-      setSubmitError('Creating blogs requires image upload; please use backend endpoint.')
+    if (!id && !selectedFile) {
+      setSubmitError('Image is required to create a blog.')
       return
     }
+    setIsSubmitting(true)
+
+    const formData = new FormData()
+    formData.append('title', values.title)
+    formData.append('description', values.description)
+    formData.append('category', values.category)
+    formData.append('writtenBy', values.writtenBy)
+    formData.append('metadata', values.metadata || '')
+
+    if (selectedFile) {
+      formData.append('image', selectedFile)
+    }
+
     try {
-      await api.put(`/blogs/${id}`, values)
+      if (id) {
+        await api.put(`/blogs/${id}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        toast.success('Blog updated')
+      } else {
+        await api.post('/blogs', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        toast.success('Blog created')
+      }
       dispatch(fetchBlogs())
       navigate('/blogs')
     } catch (error) {
-      setSubmitError(error?.response?.data?.message || 'Failed to update blog')
+      setSubmitError(error?.response?.data?.message || 'Failed to save blog')
+      toast.error(error?.response?.data?.message || 'Failed to save blog')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -70,7 +104,13 @@ const BlogForm = () => {
 
         <label className="form-field">
           <span>Category</span>
-          <input type="text" placeholder="cancer | kidney | heart | nerve | spinal | other" {...register('category')} />
+          <select {...register('category', { required: true })}>
+            {VALID_CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label className="form-field">
@@ -83,14 +123,26 @@ const BlogForm = () => {
           <input type="text" placeholder="comma separated tags" {...register('metadata')} />
         </label>
 
+        <label className="form-field">
+          <span>Cover Image</span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+          />
+          {blog?.imageUrl ? <p className="form-hint"><span className='text-bold'>Current Image:</span> {blog.imageUrl}</p> : null}
+          {selectedFile ? <p className="form-hint"><span className='text-bold'>New Image:</span> {selectedFile.name}</p> : null}
+        </label>
+
         {submitError ? <p className="form-error">{submitError}</p> : null}
 
         <div className="form-actions">
           <button className="ghost-button" type="button" onClick={() => navigate('/blogs')}>
             Cancel
           </button>
-          <button className="primary-button" type="submit">
-            {id ? 'Save changes' : 'Create blog'}
+          <button className="primary-button" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? <span className="spinner" /> : null}
+            {isSubmitting ? 'Saving...' : id ? 'Save changes' : 'Create blog'}
           </button>
         </div>
       </form>

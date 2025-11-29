@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 import AppLayout from './components/layout/AppLayout'
 import ProtectedRoute from './components/common/ProtectedRoute'
 import Dashboard from './pages/Dashboard'
@@ -25,6 +26,7 @@ function App() {
   return (
     <>
       <ThemeWatcher />
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} />
       <Routes>
         <Route path="/login" element={<Login />} />
 

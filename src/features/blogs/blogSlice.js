@@ -9,7 +9,8 @@ const initialState = {
 
 export const fetchBlogs = createAsyncThunk('blogs/fetchAll', async (_, { rejectWithValue }) => {
   try {
-    const response = await api.get('/blogs')
+    const response = await api.get('/blogs');
+    console.log("blog response",response);
     return response.data
   } catch (error) {
     return rejectWithValue(error?.response?.data?.message || 'Failed to load blogs')

@@ -1,10 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { LuPencilLine, LuPlus, LuTrash2 } from 'react-icons/lu'
 import { fetchServices } from '../../features/services/serviceSlice'
+import api from '../../api/axios'
+import { toast } from 'react-toastify'
 
 const ServiceList = () => {
+  const [deletingId, setDeletingId] = useState(null)
   const dispatch = useDispatch()
   const { items: services, status, error } = useSelector((state) => state.services)
 
@@ -33,8 +36,11 @@ const ServiceList = () => {
 
       <div className="card-list">
         {services.map((service) => (
-          <article key={service._id} className="card-row">
-            <div>
+          <article key={service._id} className="card-row blog-card">
+            <div className="blog-thumb">
+              {service.imageUrl ? <img src={service.imageUrl} alt={service.title} /> : <div className="thumb-placeholder" />}
+            </div>
+            <div className="blog-body">
               <p className="card-title">{service.title}</p>
               <p className="muted">{service.description}</p>
             </div>
@@ -43,9 +49,24 @@ const ServiceList = () => {
                 <LuPencilLine size={16} />
                 Edit
               </Link>
-              <button className="ghost-button danger" disabled>
-                <LuTrash2 size={16} />
-                Delete
+              <button
+                className="ghost-button danger"
+                disabled={deletingId === service._id}
+                onClick={async () => {
+                  setDeletingId(service._id)
+                  try {
+                    await api.delete(`/services/${service._id}`)
+                    toast.success('Service deleted')
+                    dispatch(fetchServices())
+                  } catch (err) {
+                    toast.error(err?.response?.data?.message || 'Failed to delete service')
+                  } finally {
+                    setDeletingId(null)
+                  }
+                }}
+              >
+                {deletingId === service._id ? <span className="spinner" /> : <LuTrash2 size={16} />}
+                {deletingId === service._id ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </article>

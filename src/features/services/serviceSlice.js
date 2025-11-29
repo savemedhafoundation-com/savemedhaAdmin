@@ -10,6 +10,7 @@ const initialState = {
 export const fetchServices = createAsyncThunk('services/fetchAll', async (_, { rejectWithValue }) => {
   try {
     const response = await api.get('/services')
+    console.log("service response",response);
     return response.data
   } catch (error) {
     return rejectWithValue(error?.response?.data?.message || 'Failed to load services')

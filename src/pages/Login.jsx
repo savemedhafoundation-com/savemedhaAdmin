@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { LuLock, LuMail } from 'react-icons/lu'
 import { login } from '../features/auth/authSlice'
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -25,6 +26,9 @@ const Login = () => {
     if (login.fulfilled.match(result)) {
       const redirectTo = location.state?.from?.pathname || '/'
       navigate(redirectTo, { replace: true })
+      toast.success('Signed in')
+    } else if (login.rejected.match(result)) {
+      toast.error(result.payload || 'Login failed')
     }
   }
 

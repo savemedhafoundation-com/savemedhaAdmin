@@ -283,6 +283,95 @@ h2 {
   align-items: center;
 }
 
+.card-row.blog-card {
+  align-items: stretch;
+  gap: 14px;
+}
+
+.blog-thumb {
+  width: 120px;
+  height: 96px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--accent);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.blog-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.blog-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.blog-head {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.blog-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  color: var(--muted);
+  font-size: 13px;
+  align-items: center;
+}
+
+.blog-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.blog-comments {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.comment-chip {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(31, 122, 236, 0.05);
+}
+
+.comment-name {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.comment-text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .card-title {
   margin: 0;
   font-weight: 700;
@@ -304,6 +393,7 @@ h2 {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .primary-button,
@@ -340,6 +430,15 @@ h2 {
 .ghost-button:hover {
   border-color: var(--primary);
   color: var(--primary);
+}
+
+.ghost-button--solid {
+  background: rgba(31, 122, 236, 0.08);
+  border-color: var(--border);
+}
+
+.ghost-button--solid.danger {
+  background: rgba(196, 76, 76, 0.08);
 }
 
 .ghost-button.danger {
@@ -390,6 +489,13 @@ h2 {
 
 .form-field textarea {
   resize: vertical;
+}
+
+.form-hint {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+  word-break: break-all;
 }
 
 .form-field input:focus,
