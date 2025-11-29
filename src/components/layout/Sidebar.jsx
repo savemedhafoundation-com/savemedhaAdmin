@@ -9,6 +9,7 @@ const Sidebar = () => {
     { label: 'Dashboard', icon: <LuLayoutDashboard />, to: '/' },
     { label: 'Blogs', icon: <LuNewspaper />, to: '/blogs' },
     { label: 'Services', icon: <LuBriefcase />, to: '/services' },
+    { label: 'Newsletter', icon: <LuNewspaper />, to: '/newsletter' },
   ]
 
   return (

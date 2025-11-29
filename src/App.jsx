@@ -10,6 +10,7 @@ import BlogForm from './pages/blogs/BlogForm'
 import ServiceList from './pages/services/ServiceList'
 import ServiceForm from './pages/services/ServiceForm'
 import Login from './pages/Login'
+import NewsletterList from './pages/newsletter/NewsletterList'
 
 const ThemeWatcher = () => {
   const theme = useSelector((state) => state.ui.theme)
@@ -44,6 +45,7 @@ function App() {
           <Route path="/services" element={<ServiceList />} />
           <Route path="/services/new" element={<ServiceForm />} />
           <Route path="/services/:id" element={<ServiceForm />} />
+          <Route path="/newsletter" element={<NewsletterList />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
