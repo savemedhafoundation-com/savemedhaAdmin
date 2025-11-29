@@ -9,6 +9,8 @@ import BlogList from './pages/blogs/BlogList'
 import BlogForm from './pages/blogs/BlogForm'
 import ServiceList from './pages/services/ServiceList'
 import ServiceForm from './pages/services/ServiceForm'
+import TestimonialList from './pages/testimonials/TestimonialList'
+import TestimonialForm from './pages/testimonials/TestimonialForm'
 import Login from './pages/Login'
 import NewsletterList from './pages/newsletter/NewsletterList'
 
@@ -45,6 +47,9 @@ function App() {
           <Route path="/services" element={<ServiceList />} />
           <Route path="/services/new" element={<ServiceForm />} />
           <Route path="/services/:id" element={<ServiceForm />} />
+          <Route path="/testimonials" element={<TestimonialList />} />
+          <Route path="/testimonials/new" element={<TestimonialForm />} />
+          <Route path="/testimonials/:id" element={<TestimonialForm />} />
           <Route path="/newsletter" element={<NewsletterList />} />
         </Route>
 

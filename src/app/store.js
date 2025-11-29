@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '../features/auth/authSlice'
 import blogReducer from '../features/blogs/blogSlice'
 import serviceReducer from '../features/services/serviceSlice'
+import testimonialReducer from '../features/testimonials/testimonialSlice'
 import uiReducer from '../features/ui/uiSlice'
 import newsletterReducer from '../features/newsletter/newsletterSlice'
 import { injectStore } from '../api/axios'
@@ -11,6 +12,7 @@ const store = configureStore({
     auth: authReducer,
     blogs: blogReducer,
     services: serviceReducer,
+    testimonials: testimonialReducer,
     ui: uiReducer,
     newsletter: newsletterReducer,
   },
