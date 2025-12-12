@@ -38,10 +38,14 @@
 .sidebar__brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
+  /* gap: 12px; */
+  /* padding: 12px; */
+  padding-left: 40px;
   border-radius: var(--radius);
   background: linear-gradient(135deg, rgba(31, 122, 236, 0.12), transparent);
+  max-width: 250px;
+  max-height: 200px;
+  overflow: hidden;
 }
 
 .brand-dot {
@@ -55,6 +59,11 @@
 .brand-title {
   margin: 0;
   font-weight: 700;
+}
+.brand-title img{
+  width: 100px;
+  height: 50px;
+  object-fit: contain;
 }
 
 .brand-subtitle {

@@ -17,10 +17,12 @@ const Sidebar = () => {
   return (
     <aside className="sidebar">
       <div className="sidebar__brand">
-        <span className="brand-dot" />
+        {/* <span className="brand-dot" /> */}
         <div>
-          <p className="brand-title">Savemedha</p>
-          <p className="brand-subtitle">Admin Panel</p>
+          <p className="brand-title">
+            <img  src='./1.png'></img>
+          </p>
+          {/* <p className="brand-subtitle">Admin Panel</p> */}
         </div>
       </div>
 
