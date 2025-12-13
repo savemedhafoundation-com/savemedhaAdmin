@@ -404,7 +404,7 @@ h2 {
 .global-loader__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(125, 231, 245, 0.082);
   backdrop-filter: blur(2px);
 }
 
