@@ -4,7 +4,6 @@ import ThemeToggle from '../common/ThemeToggle'
 
 const Header = () => {
   const user = useSelector((state) => state.auth.user)
-
   return (
     <header className="topbar">
       <div className="topbar__left">
@@ -19,10 +18,10 @@ const Header = () => {
           <LuBell size={18} />
         </button>
         <div className="user-chip">
-          <div className="user-avatar">{user?.name?.[0] || 'A'}</div>
+          <div className="user-avatar">{user?.firstName?.[0].toUpperCase() || 'A'}</div>
           <div>
-            <p className="user-name">{user?.name || 'Admin'}</p>
-            <p className="user-role">Super Admin</p>
+            <p className="user-name">{user?.firstName || 'Admin'} {user?.lastName || ''}</p>
+            <p className="user-role">{user.role}</p>
           </div>
         </div>
       </div>

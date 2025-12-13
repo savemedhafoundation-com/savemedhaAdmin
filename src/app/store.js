@@ -3,6 +3,7 @@ import authReducer from '../features/auth/authSlice'
 import blogReducer from '../features/blogs/blogSlice'
 import serviceReducer from '../features/services/serviceSlice'
 import testimonialReducer from '../features/testimonials/testimonialSlice'
+import userReducer from '../features/users/userSlice'
 import uiReducer from '../features/ui/uiSlice'
 import newsletterReducer from '../features/newsletter/newsletterSlice'
 import callbackReducer from '../features/callbacks/callbackSlice'
@@ -14,6 +15,7 @@ const store = configureStore({
     blogs: blogReducer,
     services: serviceReducer,
     testimonials: testimonialReducer,
+    users: userReducer,
     ui: uiReducer,
     newsletter: newsletterReducer,
     callbacks: callbackReducer,

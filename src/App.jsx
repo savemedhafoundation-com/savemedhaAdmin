@@ -15,6 +15,8 @@ import Login from './pages/Login'
 import NewsletterList from './pages/newsletter/NewsletterList'
 import CallbackList from './pages/callbacks/CallbackList'
 import CallbackForm from './pages/callbacks/CallbackForm'
+import UserList from './pages/users/UserList'
+import UserForm from './pages/users/UserForm'
 
 const ThemeWatcher = () => {
   const theme = useSelector((state) => state.ui.theme)
@@ -55,6 +57,9 @@ function App() {
           <Route path="/requestcallbacks" element={<CallbackList />} />
           <Route path="/requestcallbacks/new" element={<CallbackForm />} />
           <Route path="/newsletter" element={<NewsletterList />} />
+          <Route path="/users" element={<UserList />} />
+          <Route path="/users/new" element={<UserForm />} />
+          <Route path="/users/:id" element={<UserForm />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LuLayoutDashboard, LuNewspaper, LuBriefcase, LuLogOut } from 'react-icons/lu'
+import { LuBriefcase, LuLayoutDashboard, LuLogOut, LuNewspaper, LuUsers } from 'react-icons/lu'
 import { useDispatch } from 'react-redux'
 import { logout } from '../../features/auth/authSlice'
 
@@ -12,6 +12,7 @@ const Sidebar = () => {
     { label: 'Testimonials', icon: <LuNewspaper />, to: '/testimonials' },
     { label: 'Request Callbacks', icon: <LuNewspaper />, to: '/requestcallbacks' },
     { label: 'Newsletter', icon: <LuNewspaper />, to: '/newsletter' },
+    { label: 'Users', icon: <LuUsers />, to: '/users' },
   ]
 
   return (
