@@ -17,6 +17,7 @@ import CallbackList from './pages/callbacks/CallbackList'
 import CallbackForm from './pages/callbacks/CallbackForm'
 import UserList from './pages/users/UserList'
 import UserForm from './pages/users/UserForm'
+import GlobalLoader from './components/common/GlobalLoader'
 
 const ThemeWatcher = () => {
   const theme = useSelector((state) => state.ui.theme)
@@ -33,6 +34,7 @@ function App() {
   return (
     <>
       <ThemeWatcher />
+      <GlobalLoader />
       <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} />
       <Routes>
         <Route path="/login" element={<Login />} />
