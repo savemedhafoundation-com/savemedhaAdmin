@@ -153,7 +153,7 @@ const CallbackList = () => {
                 </button>
               </div>
 
-              <div className="action-cell">
+              {/* <div className="action-cell">
                 <p className="action-label">Remove</p>
                 <button
                   className="ghost-button danger ghost-button--solid"
@@ -163,7 +163,7 @@ const CallbackList = () => {
                   {deletingId === item._id ? <span className="spinner" /> : <LuTrash2 size={16} />}
                   {deletingId === item._id ? 'Deleting...' : 'Delete'}
                 </button>
-              </div>
+              </div> */}
             </div>
           </article>
         ))}

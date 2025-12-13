@@ -1,19 +1,24 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { LuChartBar, LuListChecks, LuSparkles, LuUsers } from "react-icons/lu";
+import { LuChartBar, LuListChecks, LuSparkles, LuUsers, LuSave } from "react-icons/lu";
+import { toast } from "react-toastify";
 import { fetchBlogs } from "../features/blogs/blogSlice";
 import { fetchServices } from "../features/services/serviceSlice";
+import api from "../api/axios";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const blogCount = useSelector((state) => state.blogs.items.length);
   const serviceCount = useSelector((state) => state.services.items.length);
   const userDetails = useSelector((state) => state.auth.user);
+  const [counts, setCounts] = useState({ members: 0, cities: 0 });
+  const [countForm, setCountForm] = useState({ members: "", cities: "" });
+  const [isSavingCounts, setIsSavingCounts] = useState(false);
   const isAdmin = useMemo(
     () =>
       userDetails?.role
-        ? ["admin",  "administrator"].includes(
+        ? ["superadmin","admin"].includes(
             userDetails.role.toLowerCase()
           )
         : false,
@@ -25,6 +30,32 @@ const Dashboard = () => {
     dispatch(fetchServices());
   }, [dispatch]);
 
+  useEffect(() => {
+    const loadCounts = async () => {
+      try {
+        const response = await api.get("/cities");
+        setCounts({
+          members: response.data?.members || 0,
+          cities: response.data?.cities || 0,
+        });
+        setCountForm({
+          members: String(response.data?.members ?? ""),
+          cities: String(response.data?.cities ?? ""),
+        });
+      } catch (_err) {
+        // silent fail; counts remain zero
+      }
+    };
+    loadCounts();
+  }, []);
+
+  useEffect(() => {
+    setCountForm({
+      members: String(counts.members ?? ""),
+      cities: String(counts.cities ?? ""),
+    });
+  }, [counts]);
+
   const cards = [
     { label: "Active Blogs", value: blogCount, icon: <LuListChecks /> },
     {
@@ -32,8 +63,44 @@ const Dashboard = () => {
       value: serviceCount,
       icon: <LuSparkles />,
     },
+    { label: "Members Reached", value: counts.members, icon: <LuUsers /> },
+    { label: "Cities Covered", value: counts.cities, icon: <LuSparkles /> },
     { label: "Engagement", value: "68%", icon: <LuChartBar /> },
   ];
+
+  const handleCountSave = async () => {
+    const payload = {};
+    if (countForm.members !== "") {
+      payload.members = Number(countForm.members);
+    }
+    if (countForm.cities !== "") {
+      payload.cities = Number(countForm.cities);
+    }
+
+    if (Object.keys(payload).length === 0) {
+      toast.error("Enter a value to update");
+      return;
+    }
+
+    if (Number.isNaN(payload.members) || Number.isNaN(payload.cities)) {
+      toast.error("Counts must be numbers");
+      return;
+    }
+
+    setIsSavingCounts(true);
+    try {
+      const response = await api.patch("/cities", payload);
+      setCounts({
+        members: response.data?.members || 0,
+        cities: response.data?.cities || 0,
+      });
+      toast.success("Counts updated");
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to update counts");
+    } finally {
+      setIsSavingCounts(false);
+    }
+  };
 
   return (
     <div className="page">
@@ -55,6 +122,43 @@ const Dashboard = () => {
           <Link className="ghost-button ghost-button--solid" to="/users">
             Manage users
           </Link>
+        </div>
+      )}
+      {isAdmin && (
+        <div className="stacked-form" style={{ marginBottom: "1rem" }}>
+          <div className="page-header" style={{ padding: 0 }}>
+            <div>
+              <p className="eyebrow">Public stats</p>
+              <h3 style={{ margin: "4px 0" }}>Update counters for Countdown</h3>
+              <p className="muted" style={{color:"red"}}>*Make sure values will only increase. Lower numbers are ignored by the API.</p>
+            </div>
+          </div>
+          <div className="grid two-col">
+            <label className="form-field">
+              <span>Members reached</span>
+              <input
+                type="number"
+                min={counts.members}
+                value={countForm.members}
+                onChange={(e) => setCountForm((prev) => ({ ...prev, members: e.target.value }))}
+              />
+            </label>
+            <label className="form-field">
+              <span>Cities covered</span>
+              <input
+                type="number"
+                min={counts.cities}
+                value={countForm.cities}
+                onChange={(e) => setCountForm((prev) => ({ ...prev, cities: e.target.value }))}
+              />
+            </label>
+          </div>
+          <div className="form-actions" style={{ justifyContent: "flex-end" }}>
+            <button className="primary-button" type="button" onClick={handleCountSave} disabled={isSavingCounts}>
+              {isSavingCounts ? <span className="spinner" /> : <LuSave size={16} />}
+              {isSavingCounts ? "Saving..." : "Save counts"}
+            </button>
+          </div>
         </div>
       )}
       <div className="grid">

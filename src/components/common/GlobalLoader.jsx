@@ -10,7 +10,7 @@ const GlobalLoader = () => {
       <div className="global-loader__backdrop" />
       <div className="global-loader__content">
         <div className="global-loader__spinner" />
-        <p>Processing request...</p>
+        <p>Please wait...</p>
       </div>
     </div>
   )

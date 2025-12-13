@@ -5,7 +5,7 @@ import { LuMail, LuPhone, LuPlus, LuShield, LuTrash2, LuUser , LuUserCog } from 
 import { toast } from 'react-toastify'
 import { deleteUser, fetchUsers } from '../../features/users/userSlice'
 
-const ADMIN_ROLES = ['admin',  'administrator', 'administartor']
+const ADMIN_ROLES = ['admin', "superadmin"] 
 
 const UserList = () => {
   const dispatch = useDispatch()
@@ -26,22 +26,22 @@ const UserList = () => {
   }, [status, dispatch])
 
   const canEdit = (userId) => isAdmin || userId === authUser?._id
-  const canDelete = (userId) => isAdmin && userId !== authUser?._id
+  // const canDelete = (userId) => isAdmin && userId !== authUser?._id
 
-  const handleDelete = async (id) => {
-    if (!canDelete(id)) {
-      toast.error('You cannot delete this user')
-      return
-    }
-    setActionId(id)
-    const result = await dispatch(deleteUser(id))
-    if (deleteUser.fulfilled.match(result)) {
-      toast.success('User deleted')
-    } else {
-      toast.error(result.payload || 'Failed to delete user')
-    }
-    setActionId(null)
-  }
+  // const handleDelete = async (id) => {
+  //   if (!canDelete(id)) {
+  //     toast.error('You cannot delete this user')
+  //     return
+  //   }
+  //   setActionId(id)
+  //   const result = await dispatch(deleteUser(id))
+  //   if (deleteUser.fulfilled.match(result)) {
+  //     toast.success('User deleted')
+  //   } else {
+  //     toast.error(result.payload || 'Failed to delete user')
+  //   }
+  //   setActionId(null)
+  // }
 
   return (
     <div className="page">
