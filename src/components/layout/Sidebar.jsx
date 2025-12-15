@@ -13,6 +13,7 @@ const Sidebar = () => {
     { label: 'Treatment FAQs', icon: <LuBriefcase />, to: '/treatment-faqs' },
     { label: 'Upcoming Events', icon: <LuBriefcase />, to: '/upcoming-events' },
     { label: 'Ongoing Events', icon: <LuBriefcase />, to: '/ongoing-events' },
+    { label: 'Patient Success', icon: <LuBriefcase />, to: '/patient-success-stories' },
     { label: 'Testimonials', icon: <LuNewspaper />, to: '/testimonials' },
     { label: 'Request Callbacks', icon: <LuNewspaper />, to: '/requestcallbacks' },
     { label: 'Newsletter', icon: <LuNewspaper />, to: '/newsletter' },
