@@ -108,7 +108,7 @@ const Dashboard = () => {
     },
     { label: "Members Reached", value: counts.members, icon: <LuUsers /> },
     { label: "Cities Covered", value: counts.cities, icon: <LuSparkles /> },
-    { label: "Engagement", value: "68%", icon: <LuChartBar /> },
+    // { label: "Engagement", value: "68%", icon: <LuChartBar /> },
   ];
 
   const handleCountSave = async () => {
@@ -225,7 +225,7 @@ const Dashboard = () => {
             <p className="stat-value">{card.value}</p>
           </div>
         ))}
-        <div className="stat-card">
+        {/* <div className="stat-card">
           <div className="stat-icon"><FaChartLine  /></div>
           <p className="muted">Page views (30d)</p>
           <p className="stat-value">
@@ -252,7 +252,7 @@ const Dashboard = () => {
           <p className="stat-value">
             {isLoadingAnalytics ? <span className="spinner" /> : analytics.today.uniqueVisitors}
           </p>
-        </div>
+        </div> */}
       </div>
       <div className="card" style={{ marginTop: "1rem" }}>
         <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -263,7 +263,7 @@ const Dashboard = () => {
               Mirrors the backend endpoints: POST /api/analytics/track and GET /api/analytics/daily.
             </p> */}
           </div>
-          <div className="card-actions" style={{ gap: "0.5rem" }}>
+          {/* <div className="card-actions" style={{ gap: "0.5rem" }}>
             <button
               className="ghost-button ghost-button--solid"
               type="button"
@@ -282,9 +282,9 @@ const Dashboard = () => {
               {isPingingVisit ? <span className="spinner" /> : <LuActivity size={16} />}
               {isPingingVisit ? "Recording..." : "Record page view"}
             </button>
-          </div>
+          </div> */}
         </div>
-        <div className="grid two-col" style={{ marginTop: "1rem" }}>
+        {/* <div className="grid two-col" style={{ marginTop: "1rem" }}>
           <div>
             <p className="muted">Last day tracked</p>
             <p className="stat-value" style={{ fontSize: "1.4rem" }}>
@@ -297,7 +297,7 @@ const Dashboard = () => {
               {analytics.lastUpdated ? new Date(analytics.lastUpdated).toLocaleString() : "—"}
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
