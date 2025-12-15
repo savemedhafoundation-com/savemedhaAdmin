@@ -9,6 +9,10 @@ import BlogList from './pages/blogs/BlogList'
 import BlogForm from './pages/blogs/BlogForm'
 import ServiceList from './pages/services/ServiceList'
 import ServiceForm from './pages/services/ServiceForm'
+import TreatmentList from './pages/treatments/TreatmentList'
+import TreatmentForm from './pages/treatments/TreatmentForm'
+import TreatmentFaqList from './pages/treatmentFaqs/TreatmentFaqList'
+import TreatmentFaqForm from './pages/treatmentFaqs/TreatmentFaqForm'
 import TestimonialList from './pages/testimonials/TestimonialList'
 import TestimonialForm from './pages/testimonials/TestimonialForm'
 import Login from './pages/Login'
@@ -53,6 +57,12 @@ function App() {
           <Route path="/services" element={<ServiceList />} />
           <Route path="/services/new" element={<ServiceForm />} />
           <Route path="/services/:id" element={<ServiceForm />} />
+          <Route path="/treatments" element={<TreatmentList />} />
+          <Route path="/treatments/new" element={<TreatmentForm />} />
+          <Route path="/treatments/:id" element={<TreatmentForm />} />
+          <Route path="/treatment-faqs" element={<TreatmentFaqList />} />
+          <Route path="/treatment-faqs/new" element={<TreatmentFaqForm />} />
+          <Route path="/treatment-faqs/:id" element={<TreatmentFaqForm />} />
           <Route path="/testimonials" element={<TestimonialList />} />
           <Route path="/testimonials/new" element={<TestimonialForm />} />
           <Route path="/testimonials/:id" element={<TestimonialForm />} />
