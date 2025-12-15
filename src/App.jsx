@@ -13,6 +13,10 @@ import TreatmentList from './pages/treatments/TreatmentList'
 import TreatmentForm from './pages/treatments/TreatmentForm'
 import TreatmentFaqList from './pages/treatmentFaqs/TreatmentFaqList'
 import TreatmentFaqForm from './pages/treatmentFaqs/TreatmentFaqForm'
+import UpcomingEventList from './pages/upcomingEvents/UpcomingEventList'
+import UpcomingEventForm from './pages/upcomingEvents/UpcomingEventForm'
+import OngoingEventList from './pages/ongoingEvents/OngoingEventList'
+import OngoingEventForm from './pages/ongoingEvents/OngoingEventForm'
 import TestimonialList from './pages/testimonials/TestimonialList'
 import TestimonialForm from './pages/testimonials/TestimonialForm'
 import Login from './pages/Login'
@@ -63,6 +67,12 @@ function App() {
           <Route path="/treatment-faqs" element={<TreatmentFaqList />} />
           <Route path="/treatment-faqs/new" element={<TreatmentFaqForm />} />
           <Route path="/treatment-faqs/:id" element={<TreatmentFaqForm />} />
+          <Route path="/upcoming-events" element={<UpcomingEventList />} />
+          <Route path="/upcoming-events/new" element={<UpcomingEventForm />} />
+          <Route path="/upcoming-events/:id" element={<UpcomingEventForm />} />
+          <Route path="/ongoing-events" element={<OngoingEventList />} />
+          <Route path="/ongoing-events/new" element={<OngoingEventForm />} />
+          <Route path="/ongoing-events/:id" element={<OngoingEventForm />} />
           <Route path="/testimonials" element={<TestimonialList />} />
           <Route path="/testimonials/new" element={<TestimonialForm />} />
           <Route path="/testimonials/:id" element={<TestimonialForm />} />

@@ -259,9 +259,9 @@ const Dashboard = () => {
           <div>
             <p className="eyebrow">Visitor analytics</p>
             <h3 style={{ margin: "4px 0" }}>Record and refresh</h3>
-            <p className="muted">
+            {/* <p className="muted">
               Mirrors the backend endpoints: POST /api/analytics/track and GET /api/analytics/daily.
-            </p>
+            </p> */}
           </div>
           <div className="card-actions" style={{ gap: "0.5rem" }}>
             <button
