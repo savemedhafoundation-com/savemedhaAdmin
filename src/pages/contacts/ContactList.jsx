@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 const ContactList = () => {
   const dispatch = useDispatch()
   const { items, status, error } = useSelector((state) => state.contacts)
-  console.log("items contact", items);
+  // console.log("items contact", items);
   const [deletingId, setDeletingId] = useState(null)
   const [updatingId, setUpdatingId] = useState(null)
 

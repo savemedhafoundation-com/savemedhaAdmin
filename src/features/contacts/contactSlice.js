@@ -22,7 +22,7 @@ export const fetchContacts = createAsyncThunk(
 export const updateContact = createAsyncThunk(
   'contacts/update',
   async ({ id, data }, { rejectWithValue }) => {
-    console.log("data", data)
+    // console.log("data", data)
     try {
       const response = await api.put(`/contact-us/${id}`, data)
       return response.data
