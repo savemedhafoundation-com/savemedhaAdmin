@@ -8,6 +8,7 @@ import treatmentFaqReducer from '../features/treatmentFaqs/treatmentFaqSlice'
 import upcomingEventReducer from '../features/upcomingEvents/upcomingEventSlice'
 import ongoingEventReducer from '../features/ongoingEvents/ongoingEventSlice'
 import patientSuccessReducer from '../features/patientSuccess/patientSuccessSlice'
+import contactsReducer from '../features/contacts/contactSlice'
 import userReducer from '../features/users/userSlice'
 import uiReducer from '../features/ui/uiSlice'
 import newsletterReducer from '../features/newsletter/newsletterSlice'
@@ -25,6 +26,7 @@ const store = configureStore({
     upcomingEvents: upcomingEventReducer,
     ongoingEvents: ongoingEventReducer,
     patientSuccess: patientSuccessReducer,
+    contacts: contactsReducer,
     users: userReducer,
     ui: uiReducer,
     newsletter: newsletterReducer,

@@ -14,6 +14,7 @@ const Sidebar = () => {
     { label: 'Upcoming Events', icon: <LuBriefcase />, to: '/upcoming-events' },
     { label: 'Ongoing Events', icon: <LuBriefcase />, to: '/ongoing-events' },
     { label: 'Patient Success stories', icon: <LuBriefcase />, to: '/patient-success-stories' },
+    { label: 'Contacts', icon: <LuBriefcase />, to: '/contacts' },
     { label: 'Testimonials', icon: <LuNewspaper />, to: '/testimonials' },
     { label: 'Patient Request', icon: <LuNewspaper />, to: '/requestcallbacks' },
     { label: 'Newsletter', icon: <LuNewspaper />, to: '/newsletter' },

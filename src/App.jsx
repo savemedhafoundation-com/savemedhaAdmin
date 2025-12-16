@@ -19,6 +19,7 @@ import OngoingEventList from './pages/ongoingEvents/OngoingEventList'
 import OngoingEventForm from './pages/ongoingEvents/OngoingEventForm'
 import PatientSuccessList from './pages/patientSuccess/PatientSuccessList'
 import PatientSuccessForm from './pages/patientSuccess/PatientSuccessForm'
+import ContactList from './pages/contacts/ContactList'
 import TestimonialList from './pages/testimonials/TestimonialList'
 import TestimonialForm from './pages/testimonials/TestimonialForm'
 import Login from './pages/Login'
@@ -78,6 +79,7 @@ function App() {
           <Route path="/patient-success-stories" element={<PatientSuccessList />} />
           <Route path="/patient-success-stories/new" element={<PatientSuccessForm />} />
           <Route path="/patient-success-stories/:id" element={<PatientSuccessForm />} />
+          <Route path="/contacts" element={<ContactList />} />
           <Route path="/testimonials" element={<TestimonialList />} />
           <Route path="/testimonials/new" element={<TestimonialForm />} />
           <Route path="/testimonials/:id" element={<TestimonialForm />} />
