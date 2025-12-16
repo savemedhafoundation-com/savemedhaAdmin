@@ -16,6 +16,7 @@ const Sidebar = () => {
     { label: 'Youtube Success stories', icon: <LuBriefcase />, to: '/patient-success-stories' },
     { label: 'Contact us requests', icon: <LuBriefcase />, to: '/contacts' },
     { label: 'Our Locations', icon: <LuBriefcase />, to: '/addresses' },
+    { label: 'Ebooks', icon: <LuBriefcase />, to: '/ebooks' },
     { label: 'Testimonials', icon: <LuNewspaper />, to: '/testimonials' },
     { label: 'Patient Query Requests', icon: <LuNewspaper />, to: '/requestcallbacks' },
     { label: 'Newsletter', icon: <LuNewspaper />, to: '/newsletter' },

@@ -10,6 +10,7 @@ import ongoingEventReducer from '../features/ongoingEvents/ongoingEventSlice'
 import patientSuccessReducer from '../features/patientSuccess/patientSuccessSlice'
 import contactsReducer from '../features/contacts/contactSlice'
 import addressesReducer from '../features/addresses/addressSlice'
+import ebooksReducer from '../features/ebooks/ebookSlice'
 import userReducer from '../features/users/userSlice'
 import uiReducer from '../features/ui/uiSlice'
 import newsletterReducer from '../features/newsletter/newsletterSlice'
@@ -29,6 +30,7 @@ const store = configureStore({
     patientSuccess: patientSuccessReducer,
     contacts: contactsReducer,
     addresses: addressesReducer,
+    ebooks: ebooksReducer,
     users: userReducer,
     ui: uiReducer,
     newsletter: newsletterReducer,

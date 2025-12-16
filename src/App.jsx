@@ -24,6 +24,8 @@ import AddressList from './pages/addresses/AddressList'
 import AddressForm from './pages/addresses/AddressForm'
 import TestimonialList from './pages/testimonials/TestimonialList'
 import TestimonialForm from './pages/testimonials/TestimonialForm'
+import EbookList from './pages/ebooks/EbookList'
+import EbookForm from './pages/ebooks/EbookForm'
 import Login from './pages/Login'
 import NewsletterList from './pages/newsletter/NewsletterList'
 import CallbackList from './pages/callbacks/CallbackList'
@@ -85,6 +87,9 @@ function App() {
           <Route path="/addresses" element={<AddressList />} />
           <Route path="/addresses/new" element={<AddressForm />} />
           <Route path="/addresses/:id" element={<AddressForm />} />
+          <Route path="/ebooks" element={<EbookList />} />
+          <Route path="/ebooks/new" element={<EbookForm />} />
+          <Route path="/ebooks/:id" element={<EbookForm />} />
           <Route path="/testimonials" element={<TestimonialList />} />
           <Route path="/testimonials/new" element={<TestimonialForm />} />
           <Route path="/testimonials/:id" element={<TestimonialForm />} />
