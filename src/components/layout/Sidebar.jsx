@@ -13,12 +13,13 @@ const Sidebar = () => {
     { label: 'Treatment FAQs', icon: <LuBriefcase />, to: '/treatment-faqs' },
     { label: 'Upcoming Events', icon: <LuBriefcase />, to: '/upcoming-events' },
     { label: 'Ongoing Events', icon: <LuBriefcase />, to: '/ongoing-events' },
-    { label: 'Patient Success stories', icon: <LuBriefcase />, to: '/patient-success-stories' },
-    { label: 'Contacts', icon: <LuBriefcase />, to: '/contacts' },
+    { label: 'Youtube Success stories', icon: <LuBriefcase />, to: '/patient-success-stories' },
+    { label: 'Contact us requests', icon: <LuBriefcase />, to: '/contacts' },
+    { label: 'Our Locations', icon: <LuBriefcase />, to: '/addresses' },
     { label: 'Testimonials', icon: <LuNewspaper />, to: '/testimonials' },
-    { label: 'Patient Request', icon: <LuNewspaper />, to: '/requestcallbacks' },
+    { label: 'Patient Query Requests', icon: <LuNewspaper />, to: '/requestcallbacks' },
     { label: 'Newsletter', icon: <LuNewspaper />, to: '/newsletter' },
-    { label: 'Users', icon: <LuUsers />, to: '/users' },
+    { label: 'Admin Users', icon: <LuUsers />, to: '/users' },
   ]
 
   return (
