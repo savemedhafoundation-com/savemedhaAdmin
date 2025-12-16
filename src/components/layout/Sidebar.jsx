@@ -17,6 +17,8 @@ const Sidebar = () => {
     { label: 'Contact us requests', icon: <LuBriefcase />, to: '/contacts' },
     { label: 'Our Locations', icon: <LuBriefcase />, to: '/addresses' },
     { label: 'Ebooks', icon: <LuBriefcase />, to: '/ebooks' },
+    { label: 'Applications', icon: <LuBriefcase />, to: '/applications' },
+    { label: 'Jobs', icon: <LuBriefcase />, to: '/jobs' },
     { label: 'Testimonials', icon: <LuNewspaper />, to: '/testimonials' },
     { label: 'Patient Query Requests', icon: <LuNewspaper />, to: '/requestcallbacks' },
     { label: 'Newsletter', icon: <LuNewspaper />, to: '/newsletter' },
@@ -24,7 +26,7 @@ const Sidebar = () => {
   ]
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar" style={{ maxHeight: '100vh', overflowY: 'auto' }}>
       <div className="sidebar__brand">
         {/* <span className="brand-dot" /> */}
         <div>

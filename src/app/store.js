@@ -11,6 +11,8 @@ import patientSuccessReducer from '../features/patientSuccess/patientSuccessSlic
 import contactsReducer from '../features/contacts/contactSlice'
 import addressesReducer from '../features/addresses/addressSlice'
 import ebooksReducer from '../features/ebooks/ebookSlice'
+import applicationsReducer from '../features/applications/applicationSlice'
+import jobsReducer from '../features/jobs/jobSlice'
 import userReducer from '../features/users/userSlice'
 import uiReducer from '../features/ui/uiSlice'
 import newsletterReducer from '../features/newsletter/newsletterSlice'
@@ -31,6 +33,8 @@ const store = configureStore({
     contacts: contactsReducer,
     addresses: addressesReducer,
     ebooks: ebooksReducer,
+    applications: applicationsReducer,
+    jobs: jobsReducer,
     users: userReducer,
     ui: uiReducer,
     newsletter: newsletterReducer,
