@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { LuCalendarClock, LuMessageCircle, LuPencilLine, LuPlus, LuTag, LuTrash2, LuUserRound } from 'react-icons/lu'
+import { LuCalendarClock, LuEye, LuHeart, LuMessageCircle, LuPencilLine, LuPlus, LuShare2, LuTag, LuTrash2, LuUserRound } from 'react-icons/lu'
 import { fetchBlogs } from '../../features/blogs/blogSlice'
 import api from '../../api/axios'
 import { toast } from 'react-toastify'
@@ -11,6 +11,7 @@ const BlogList = () => {
   const [deletingId, setDeletingId] = useState(null)
   const dispatch = useDispatch()
   const { items: blogs, status, error } = useSelector((state) => state.blogs)
+  const stripHtml = (value) => (value ? value.replace(/<[^>]*>/g, '') : '')
 
   useEffect(() => {
     if (status === 'idle') {
@@ -28,6 +29,25 @@ const BlogList = () => {
       toast.error(err?.response?.data?.message || 'Failed to delete blog')
     } finally {
       setDeletingId(null)
+    }
+  }
+
+  const handleLike = async (id) => {
+    try {
+      await api.post(`/blogs/${id}/like`)
+      dispatch(fetchBlogs())
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to like blog')
+    }
+  }
+
+  const handleShare = async (id) => {
+    try {
+      await api.post(`/blogs/${id}/share`)
+      dispatch(fetchBlogs())
+      toast.success('Share recorded')
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to share blog')
     }
   }
 
@@ -58,9 +78,15 @@ const BlogList = () => {
               <div className="blog-head">
                 <div>
                   <p className="card-title">{blog.title}</p>
-                  <p className="muted">{blog.description?.slice(0, 180)}{blog.description?.length > 180 ? '…' : ''}</p>
+                  <p className="muted">
+                    {stripHtml(blog.description).slice(0, 180)}
+                    {stripHtml(blog.description).length > 180 ? '...' : ''}
+                  </p>
                 </div>
-                <p className="pill">{blog.category || 'N/A'}</p>
+                <p className="pill">
+                  {blog.category || 'N/A'}
+                  {blog.subCategory ? ` / ${blog.subCategory}` : ''}
+                </p>
               </div>
 
               <div className="blog-meta">
@@ -68,6 +94,10 @@ const BlogList = () => {
                 <span><LuCalendarClock size={14} /> {blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : '--'}</span>
                 <span><LuMessageCircle size={14} /> {blog.comments?.length || 0} comments</span>
                 <span><LuTag size={14} /> {(blog.metadata || []).join(', ') || 'No tags'}</span>
+                <span><LuTag size={14} /> {blog.cancerStage || 'ANY'}</span>
+                <span><LuEye size={14} /> {blog.viewsCount || 0} views</span>
+                <span><LuHeart size={14} /> {blog.likesCount || 0} likes</span>
+                <span><LuShare2 size={14} /> {blog.sharesCount || 0} shares</span>
               </div>
 
               {blog.comments?.length ? (
@@ -90,6 +120,14 @@ const BlogList = () => {
                 <LuPencilLine size={16} />
                 Edit
               </Link>
+              <button className="ghost-button ghost-button--solid" onClick={() => handleLike(blog._id)}>
+                <LuHeart size={16} />
+                Like
+              </button>
+              <button className="ghost-button ghost-button--solid" onClick={() => handleShare(blog._id)}>
+                <LuShare2 size={16} />
+                Share
+              </button>
               <button
                 className="ghost-button danger ghost-button--solid"
                 disabled={deletingId === blog._id}

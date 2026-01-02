@@ -3,6 +3,7 @@ import { setLoading } from '../features/ui/uiSlice'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'https://savemedhabackend.vercel.app/api',
+  // baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
   timeout: 15000,
 })
 
