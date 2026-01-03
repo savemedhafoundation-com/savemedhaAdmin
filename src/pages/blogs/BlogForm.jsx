@@ -34,6 +34,10 @@ const BlogForm = () => {
   const quillModules = {
     toolbar: '#blog-description-toolbar',
   }
+  const MAX_FILE_SIZE_MB = 3
+  const MAX_TOTAL_UPLOAD_MB = 4.5
+  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
+  const MAX_TOTAL_UPLOAD_BYTES = MAX_TOTAL_UPLOAD_MB * 1024 * 1024
 
   const quillFormats = [
     'size',
@@ -64,6 +68,29 @@ const BlogForm = () => {
 
   const selectedCategory = watch('category')
   const selectedSubCategory = watch('subCategory')
+
+  const formatBytes = (bytes) => {
+    if (!bytes) return '0 MB'
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+  }
+
+  const validateFiles = (files, label) => {
+    if (!files?.length) return ''
+    for (const file of files) {
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        return `${label} "${file.name}" is too large. Max size is ${MAX_FILE_SIZE_MB} MB.`
+      }
+    }
+    return ''
+  }
+
+  const validateTotalUpload = (files) => {
+    const totalSize = files.reduce((sum, file) => sum + (file?.size || 0), 0)
+    if (totalSize > MAX_TOTAL_UPLOAD_BYTES) {
+      return `Total upload size is ${formatBytes(totalSize)}. Max total is ${MAX_TOTAL_UPLOAD_MB} MB.`
+    }
+    return ''
+  }
 
   useEffect(() => {
     if (status === 'idle') {
@@ -205,6 +232,26 @@ const BlogForm = () => {
     }
     if (id && selectedBlogImages.length > 0 && selectedBlogImages.length !== 2) {
       setSubmitError('Select exactly two blog images.')
+      return
+    }
+    const filesToUpload = [
+      selectedFile,
+      selectedAdminPhoto,
+      ...selectedBlogImages,
+    ].filter(Boolean)
+    const fileError =
+      validateFiles(selectedFile ? [selectedFile] : [], 'Cover image') ||
+      validateFiles(selectedAdminPhoto ? [selectedAdminPhoto] : [], 'Admin photo') ||
+      validateFiles(selectedBlogImages, 'Blog image')
+    if (fileError) {
+      setSubmitError(fileError)
+      toast.error(fileError)
+      return
+    }
+    const totalError = validateTotalUpload(filesToUpload)
+    if (totalError) {
+      setSubmitError(totalError)
+      toast.error(totalError)
       return
     }
     setIsSubmitting(true)
@@ -392,10 +439,23 @@ const BlogForm = () => {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+            onChange={(e) => {
+              const file = e.target.files?.[0] || null
+              const error = validateFiles(file ? [file] : [], 'Cover image')
+              if (error) {
+                setSubmitError(error)
+                toast.error(error)
+                e.target.value = ''
+                setSelectedFile(null)
+                return
+              }
+              setSubmitError('')
+              setSelectedFile(file)
+            }}
           />
           {blog?.imageUrl ? <p className="form-hint"><span className='text-bold'>Current Image:</span> {blog.imageUrl}</p> : null}
           {selectedFile ? <p className="form-hint"><span className='text-bold'>New Image:</span> {selectedFile.name}</p> : null}
+          <p className="form-hint">Max {MAX_FILE_SIZE_MB} MB per file.</p>
         </label>
 
         <div className="form-field">
@@ -409,6 +469,13 @@ const BlogForm = () => {
               if (!files.length) return
               if (files.length !== 2) {
                 setSubmitError('Please select exactly two images at a time.')
+                e.target.value = ''
+                return
+              }
+              const error = validateFiles(files, 'Blog image')
+              if (error) {
+                setSubmitError(error)
+                toast.error(error)
                 e.target.value = ''
                 return
               }
@@ -430,6 +497,9 @@ const BlogForm = () => {
             </button>
           ) : null}
           <p className="form-hint">Select exactly two images in the picker (Ctrl/Shift-click).</p>
+          <p className="form-hint">
+            Max {MAX_FILE_SIZE_MB} MB per file. Total upload must stay under {MAX_TOTAL_UPLOAD_MB} MB.
+          </p>
         </div>
 
         <div className="form-field">
@@ -498,7 +568,19 @@ const BlogForm = () => {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => setSelectedAdminPhoto(e.target.files?.[0] || null)}
+            onChange={(e) => {
+              const file = e.target.files?.[0] || null
+              const error = validateFiles(file ? [file] : [], 'Admin photo')
+              if (error) {
+                setSubmitError(error)
+                toast.error(error)
+                e.target.value = ''
+                setSelectedAdminPhoto(null)
+                return
+              }
+              setSubmitError('')
+              setSelectedAdminPhoto(file)
+            }}
           />
           {blog?.adminStatement?.photoUrl ? (
             <p className="form-hint"><span className='text-bold'>Current Photo:</span> {blog.adminStatement.photoUrl}</p>
@@ -506,6 +588,7 @@ const BlogForm = () => {
           {selectedAdminPhoto ? (
             <p className="form-hint"><span className='text-bold'>New Photo:</span> {selectedAdminPhoto.name}</p>
           ) : null}
+          <p className="form-hint">Max {MAX_FILE_SIZE_MB} MB per file.</p>
         </label>
 
         {submitError ? <p className="form-error">{submitError}</p> : null}
