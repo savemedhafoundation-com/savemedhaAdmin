@@ -63,6 +63,7 @@ const BlogForm = () => {
       adminDesignation: '',
       writtenBy: '',
       metadata: '',
+      youtubeLink: '',
     },
   })
 
@@ -267,6 +268,7 @@ const BlogForm = () => {
     formData.append('adminDesignation', values.adminDesignation)
     formData.append('writtenBy', values.writtenBy)
     formData.append('metadata', values.metadata || '')
+    formData.append('youtubeLink', values.youtubeLink || '')
     formData.append('faqs', JSON.stringify(faqs.filter((faq) => faq.question || faq.answer)))
 
     if (selectedFile) {
@@ -319,6 +321,7 @@ const BlogForm = () => {
 
         <label className="form-field">
           <span>Description</span>
+          <span>Use {`(&lt;image:0&gt) and (&lt;image:1&gt)`} to add blog images {`(Youtubevideo) to add youtube video`}</span>
           <div id="blog-description-toolbar">
             <select className="ql-size">
               <option value="small">Small</option>
@@ -432,6 +435,11 @@ const BlogForm = () => {
         <label className="form-field">
           <span>Metadata</span>
           <input type="text" placeholder="comma separated tags" {...register('metadata')} />
+        </label>
+
+         <label className="form-field">
+          <span>Youtube Url</span>
+          <input type="text" placeholder="Youtube Url" {...register('youtubeLink')} />
         </label>
 
         <label className="form-field">
