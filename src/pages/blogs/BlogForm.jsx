@@ -24,6 +24,10 @@ const BlogForm = () => {
   const [selectedAdminPhoto, setSelectedAdminPhoto] = useState(null)
   const [selectedBlogImages, setSelectedBlogImages] = useState([])
   const [faqs, setFaqs] = useState([{ question: '', answer: '' }])
+  const [tableOfContents, setTableOfContents] = useState([{ title: '', anchor: '' }])
+  const [resources, setResources] = useState([
+    { type: 'EBOOK_REFERENCE', title: '', url: '' },
+  ])
   const [categories, setCategories] = useState([])
   const [subCategories, setSubCategories] = useState([])
   const [newCategory, setNewCategory] = useState('')
@@ -112,6 +116,26 @@ const BlogForm = () => {
           ? blog.faqs.map((faq) => ({ question: faq.question || '', answer: faq.answer || '' }))
           : [{ question: '', answer: '' }]
       )
+      setTableOfContents(
+        Array.isArray(blog.tableOfContents) && blog.tableOfContents.length
+          ? blog.tableOfContents.map((item) => ({
+              title: item?.title || '',
+              anchor: item?.anchor || '',
+            }))
+          : [{ title: '', anchor: '' }]
+      )
+      setResources(
+        Array.isArray(blog.resources) && blog.resources.length
+          ? blog.resources.map((item) => ({
+              type: item?.type || 'EBOOK_REFERENCE',
+              title: item?.title || '',
+              url: item?.url || '',
+            }))
+          : [{ type: 'EBOOK_REFERENCE', title: '', url: '' }]
+      )
+    } else {
+      setTableOfContents([{ title: '', anchor: '' }])
+      setResources([{ type: 'EBOOK_REFERENCE', title: '', url: '' }])
     }
   }, [blog, reset, status, dispatch])
 
@@ -219,6 +243,30 @@ const BlogForm = () => {
 
   const onSubmit = async (values) => {
     setSubmitError('')
+    const parseJsonArray = (label, value) => {
+      const raw = (value || '').trim()
+      if (!raw) return []
+      try {
+        const parsed = JSON.parse(raw)
+        if (!Array.isArray(parsed)) {
+          throw new Error('Expected an array')
+        }
+        return parsed
+      } catch (error) {
+        throw new Error(`${label} must be a valid JSON array.`)
+      }
+    }
+
+    let tocPayload = []
+    const normalizedResources = (resources || [])
+      .map((item) => ({
+        type: `${item?.type || ''}`.trim().toUpperCase() || 'EBOOK_REFERENCE',
+        title: `${item?.title || ''}`.trim(),
+        url: `${item?.url || ''}`.trim(),
+      }))
+      .filter((item) => item.title || item.url)
+      .filter((item) => item.type === 'EBOOK_REFERENCE' || item.type === 'SIMILAR_BLOG')
+
     if (!id && !selectedFile) {
       setSubmitError('Image is required to create a blog.')
       return
@@ -270,6 +318,14 @@ const BlogForm = () => {
     formData.append('metadata', values.metadata || '')
     formData.append('youtubeLink', values.youtubeLink || '')
     formData.append('faqs', JSON.stringify(faqs.filter((faq) => faq.question || faq.answer)))
+    tocPayload = (tableOfContents || [])
+      .map((item) => ({
+        title: `${item?.title || ''}`.trim(),
+        anchor: `${item?.anchor || ''}`.trim(),
+      }))
+      .filter((item) => item.title || item.anchor)
+    formData.append('tableOfContents', JSON.stringify(tocPayload))
+    formData.append('resources', JSON.stringify(normalizedResources))
 
     if (selectedFile) {
       formData.append('image', selectedFile)
@@ -553,6 +609,115 @@ const BlogForm = () => {
             onClick={() => setFaqs([...faqs, { question: '', answer: '' }])}
           >
             + Add FAQ
+          </button>
+        </div>
+
+        <div className="form-field">
+          <span>Table of Contents</span>
+          <div style={{ display: 'grid', gap: '12px' }}>
+            {tableOfContents.map((item, index) => (
+              <div key={`toc-${index}`} style={{ display: 'grid', gap: '8px' }}>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  value={item.title}
+                  onChange={(event) => {
+                    const nextItems = [...tableOfContents]
+                    nextItems[index] = { ...nextItems[index], title: event.target.value }
+                    setTableOfContents(nextItems)
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Anchor (e.g. intro)"
+                  value={item.anchor}
+                  onChange={(event) => {
+                    const nextItems = [...tableOfContents]
+                    nextItems[index] = { ...nextItems[index], anchor: event.target.value }
+                    setTableOfContents(nextItems)
+                  }}
+                />
+                {tableOfContents.length > 1 ? (
+                  <button
+                    className="ghost-button"
+                    type="button"
+                    onClick={() =>
+                      setTableOfContents(tableOfContents.filter((_, itemIndex) => itemIndex !== index))
+                    }
+                  >
+                    Remove Item
+                  </button>
+                ) : null}
+              </div>
+            ))}
+          </div>
+          <button
+            className="ghost-button"
+            type="button"
+            onClick={() => setTableOfContents([...tableOfContents, { title: '', anchor: '' }])}
+          >
+            + Add Item
+          </button>
+        </div>
+
+        <div className="form-field">
+          <span>Resources</span>
+          <div style={{ display: 'grid', gap: '12px' }}>
+            {resources.map((item, index) => (
+              <div key={`resource-${index}`} style={{ display: 'grid', gap: '8px' }}>
+                <select
+                  value={item.type}
+                  onChange={(event) => {
+                    const nextItems = [...resources]
+                    nextItems[index] = { ...nextItems[index], type: event.target.value }
+                    setResources(nextItems)
+                  }}
+                >
+                  <option value="EBOOK_REFERENCE">EBOOK_REFERENCE</option>
+                  <option value="SIMILAR_BLOG">SIMILAR_BLOG</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  value={item.title}
+                  onChange={(event) => {
+                    const nextItems = [...resources]
+                    nextItems[index] = { ...nextItems[index], title: event.target.value }
+                    setResources(nextItems)
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="URL"
+                  value={item.url}
+                  onChange={(event) => {
+                    const nextItems = [...resources]
+                    nextItems[index] = { ...nextItems[index], url: event.target.value }
+                    setResources(nextItems)
+                  }}
+                />
+                {resources.length > 1 ? (
+                  <button
+                    className="ghost-button"
+                    type="button"
+                    onClick={() =>
+                      setResources(resources.filter((_, itemIndex) => itemIndex !== index))
+                    }
+                  >
+                    Remove Resource
+                  </button>
+                ) : null}
+              </div>
+            ))}
+          </div>
+          <button
+            className="ghost-button"
+            type="button"
+            onClick={() =>
+              setResources([...resources, { type: 'EBOOK_REFERENCE', title: '', url: '' }])
+            }
+          >
+            + Add Resource
           </button>
         </div>
 
