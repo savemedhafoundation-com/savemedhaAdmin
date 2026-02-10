@@ -36,6 +36,7 @@ import CallbackForm from './pages/callbacks/CallbackForm'
 import UserList from './pages/users/UserList'
 import UserForm from './pages/users/UserForm'
 import GlobalLoader from './components/common/GlobalLoader'
+import PreferenceEvents from './pages/preferenceEvents/PreferenceEvents'
 
 const ThemeWatcher = () => {
   const theme = useSelector((state) => state.ui.theme)
@@ -106,6 +107,7 @@ function App() {
           <Route path="/users" element={<UserList />} />
           <Route path="/users/new" element={<UserForm />} />
           <Route path="/users/:id" element={<UserForm />} />
+          <Route path="/preference-events" element={<PreferenceEvents />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
