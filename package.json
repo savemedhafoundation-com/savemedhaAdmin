@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
     "@tailwindcss/vite": "^4.1.17",
+    "@vercel/blob": "^2.8.0",
     "axios": "^1.7.9",
     "chart.js": "^4.4.8",
     "prop-types": "^15.8.1",
