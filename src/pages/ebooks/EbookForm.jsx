@@ -5,6 +5,27 @@ import { useForm } from 'react-hook-form'
 import { fetchEbooks, createEbook, updateEbook } from '../../features/ebooks/ebookSlice'
 import { toast } from 'react-toastify'
 
+const MAX_PDF_SIZE = 20 * 1024 * 1024
+const MAX_IMAGE_SIZE = 20 * 1024 * 1024
+
+const splitCommaSeparated = (value) =>
+  value ? value.split(',').map((item) => item.trim()).filter(Boolean) : []
+
+const validateSelectedFiles = (pdfFile, imageFile) => {
+  if (pdfFile) {
+    const isPdf = pdfFile.type === 'application/pdf' || pdfFile.name.toLowerCase().endsWith('.pdf')
+    if (!isPdf) return 'Please select a valid PDF file.'
+    if (pdfFile.size > MAX_PDF_SIZE) return 'The PDF file must be 20 MB or smaller.'
+  }
+
+  if (imageFile) {
+    if (!imageFile.type.startsWith('image/')) return 'Please select a valid banner image.'
+    if (imageFile.size > MAX_IMAGE_SIZE) return 'The banner image must be 20 MB or smaller.'
+  }
+
+  return ''
+}
+
 const EbookForm = () => {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -51,30 +72,33 @@ const EbookForm = () => {
       return
     }
 
+    const fileError = validateSelectedFiles(pdfFile, imageFile)
+    if (fileError) {
+      setSubmitError(fileError)
+      return
+    }
+
     setIsSubmitting(true)
     try {
-      const formData = new FormData()
-      formData.append('title', values.title)
-      formData.append('description', values.description)
-      if (values.authors) {
-        values.authors.split(',').map((a) => a.trim()).filter(Boolean).forEach((a) => formData.append('authors', a))
+      const payload = {
+        title: values.title,
+        description: values.description,
+        authors: splitCommaSeparated(values.authors),
+        tags: splitCommaSeparated(values.tags),
+        pdfFile,
+        imageFile,
       }
-      if (values.tags) {
-        values.tags.split(',').map((t) => t.trim()).filter(Boolean).forEach((t) => formData.append('tags', t))
-      }
-      if (pdfFile) formData.append('pdf', pdfFile)
-      if (imageFile) formData.append('image', imageFile)
 
       if (id) {
-        await dispatch(updateEbook({ id, formData })).unwrap()
+        await dispatch(updateEbook({ id, payload })).unwrap()
         toast.success('Ebook updated')
       } else {
-        await dispatch(createEbook(formData)).unwrap()
+        await dispatch(createEbook(payload)).unwrap()
         toast.success('Ebook created')
       }
       navigate('/ebooks')
     } catch (error) {
-      const message = error || 'Failed to save ebook'
+      const message = typeof error === 'string' ? error : error?.message || 'Failed to save ebook'
       setSubmitError(message)
       toast.error(message)
     } finally {
@@ -136,7 +160,7 @@ const EbookForm = () => {
         {submitError ? <p className="form-error">{submitError}</p> : null}
 
         <div className="form-actions">
-          <button className="ghost-button" type="button" onClick={() => navigate('/ebooks')}>
+          <button className="ghost-button" type="button" onClick={() => navigate('/ebooks')} disabled={isSubmitting}>
             Cancel
           </button>
           <button className="primary-button" type="submit" disabled={isSubmitting}>
